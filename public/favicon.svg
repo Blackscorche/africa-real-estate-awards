@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5D061" />
+      <stop offset="50%" stop-color="#E5A93C" />
+      <stop offset="100%" stop-color="#B37D14" />
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#24211D" />
+      <stop offset="100%" stop-color="#0E0D0B" />
+    </radialGradient>
+  </defs>
+  <!-- Rounded Shield Background -->
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="4" />
+  <!-- Stylized Luxury "A" Landmark / Award Monogram -->
+  <path d="M 64 24 L 96 100 L 78 100 L 70 80 L 58 80 L 50 100 L 32 100 Z M 64 45 L 61 70 L 67 70 Z" fill="url(#goldGrad)" />
+  <!-- Small Star Accent on Top -->
+  <polygon points="64,12 66,17 71,17 67,20 69,25 64,22 59,25 61,20 57,17 62,17" fill="#F5D061" />
+</svg>
