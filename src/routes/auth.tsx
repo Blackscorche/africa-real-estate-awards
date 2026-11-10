@@ -29,10 +29,9 @@ function AuthPage() {
   const { redirect } = Route.useSearch();
   const target = safePath(redirect);
   const navigate = useNavigate();
-  const { user, ready, signInDemo } = useAuth();
+  const { user, ready } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [busy, setBusy] = useState(false);
-  const [demoBusy, setDemoBusy] = useState<"admin" | "user" | null>(null);
 
   useEffect(() => {
     if (ready && user) navigate({ to: target, replace: true });
@@ -67,12 +66,6 @@ function AuthPage() {
     } finally {
       setBusy(false);
     }
-  }
-
-  function handleDemo(role: "admin" | "user") {
-    setDemoBusy(role);
-    signInDemo(role);
-    // navigate fires via useEffect once user is set
   }
 
   return (
@@ -127,47 +120,6 @@ function AuthPage() {
           ) : (
             <button onClick={() => setMode("signin")} className="hover:text-primary">Already have an account? <span className="font-semibold text-primary">Sign in</span></button>
           )}
-        </div>
-
-        {/* Demo access — preview only */}
-        <div className="mt-6 rounded-xl border border-dashed border-amber-400/60 bg-amber-50/60 p-4 dark:bg-amber-900/10">
-          <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-amber-700 dark:text-amber-400">
-            <svg className="size-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
-              <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-            </svg>
-            Demo preview
-          </p>
-          <p className="mb-3 text-xs text-amber-700/80 dark:text-amber-400/80">
-            Explore the platform without an account. Demo sessions are stored locally and do not persist server data.
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              disabled={demoBusy !== null}
-              onClick={() => handleDemo("admin")}
-              className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/80 disabled:opacity-60"
-            >
-              {demoBusy === "admin" ? (
-                <svg className="size-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
-              ) : (
-                <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 2a5 5 0 110 10A5 5 0 0112 2zm0 12c5.52 0 10 2.24 10 5v1H2v-1c0-2.76 4.48-5 10-5z"/></svg>
-              )}
-              Admin demo
-            </button>
-            <button
-              type="button"
-              disabled={demoBusy !== null}
-              onClick={() => handleDemo("user")}
-              className="flex items-center justify-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/10 disabled:opacity-60"
-            >
-              {demoBusy === "user" ? (
-                <svg className="size-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
-              ) : (
-                <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 12a6 6 0 100-12 6 6 0 000 12zm0 2c-4 0-12 2-12 6v2h24v-2c0-4-8-6-12-6z"/></svg>
-              )}
-              Voter demo
-            </button>
-          </div>
         </div>
 
         <p className="mt-6 text-xs text-muted-foreground">By continuing you agree to our terms. <Link to="/" className="underline">Back to site</Link></p>
