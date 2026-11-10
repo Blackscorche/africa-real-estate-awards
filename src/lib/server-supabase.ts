@@ -9,8 +9,8 @@ import type { Database } from "@/integrations/supabase/types";
  * apply as that user; otherwise requests run as an anonymous visitor.
  */
 export const getServerSupabase = createServerOnlyFn((forwardUser: boolean = false) => {
-  const url = process.env["SUPABASE_URL"];
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
+  const url = process.env["SUPABASE_URL"] || process.env["VITE_SUPABASE_URL"] || "https://wponkvezvocliwvsqsro.supabase.co";
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"] || process.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || "sb_publishable_DAcvyMbc8q_mCUlHb4d0QQ_l_wx5KRX";
   if (!url || !key) throw new Error("Backend is not configured");
 
   let token: string | undefined;
