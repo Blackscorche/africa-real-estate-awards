@@ -1,3 +1,21 @@
+if (typeof globalThis.WebSocket === "undefined") {
+  // Polyfill stub for Node runtime < 22 where native WebSocket is not globally available
+  class StubWebSocket {
+    static readonly CONNECTING = 0;
+    static readonly OPEN = 1;
+    static readonly CLOSING = 2;
+    static readonly CLOSED = 3;
+    constructor() {}
+    addEventListener() {}
+    removeEventListener() {}
+    dispatchEvent() { return false; }
+    send() {}
+    close() {}
+  }
+  // @ts-expect-error WebSocket shim for SSR
+  globalThis.WebSocket = StubWebSocket;
+}
+
 import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
