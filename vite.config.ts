@@ -4,6 +4,11 @@ export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     server: { entry: "server" },
+    // Use Node.js preset for Railway / self-hosted deployments
+    nitro: {
+      preset: "node",
+      runtimeConfig: {},
+    },
   },
   vite: {
     plugins: [

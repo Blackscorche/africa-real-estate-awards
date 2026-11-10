@@ -1,10 +1,13 @@
 {
   "$schema": "https://railway.com/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS"
+    "builder": "NIXPACKS",
+    "buildCommand": "npm install --legacy-peer-deps && npm run build",
+    "environment": {
+      "NITRO_PRESET": "node"
+    }
   },
   "deploy": {
-    "buildCommand": "npm install --legacy-peer-deps && npm run build",
     "startCommand": "node .output/server/index.mjs",
     "healthcheckPath": "/",
     "restartPolicyType": "ON_FAILURE",
