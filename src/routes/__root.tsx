@@ -87,10 +87,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  // This contains only browser-safe values. The service-role key is never
+  // embedded in HTML or exposed to the client.
+  const publicSupabaseConfig = JSON.stringify({
+    url: process.env["SUPABASE_URL"],
+    publishableKey: process.env["SUPABASE_PUBLISHABLE_KEY"],
+  }).replace(/</g, "\\u003c");
+
   return (
     <html lang="en" className="light" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+        <script dangerouslySetInnerHTML={{ __html: `window.__SUPABASE_PUBLIC_CONFIG__ = ${publicSupabaseConfig};` }} />
         <HeadContent />
       </head>
       <body>
