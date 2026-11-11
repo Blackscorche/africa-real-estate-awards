@@ -16,6 +16,7 @@ type AuthState = {
   session: Session | null;
   user: User | null;
   isAdmin: boolean;
+  roles: string[];
   signInDemo: (role: "admin" | "user") => void;
   signOut: () => Promise<void>;
 };
@@ -25,6 +26,7 @@ const AuthContext = createContext<AuthState>({
   session: null,
   user: null,
   isAdmin: false,
+  roles: [],
   signInDemo: () => {},
   signOut: async () => {},
 });
@@ -34,6 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [demoUser, setDemoUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [roles, setRoles] = useState<string[]>([]);
   const qc = useQueryClient();
   const navigate = useNavigate();
 
@@ -77,9 +80,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!uid) {
       if (!demoUser) setIsAdmin(false);
+      if (!demoUser) setRoles([]);
       return;
     }
-    supabase.rpc("has_role", { _user_id: uid, _role: "admin" }).then(({ data }) => setIsAdmin(!!data));
+    supabase.from("user_roles").select("role").eq("user_id", uid).then(({ data }) => {
+      const nextRoles = (data ?? []).map((row) => row.role);
+      setRoles(nextRoles);
+      setIsAdmin(nextRoles.includes("admin"));
+    });
   }, [uid, demoUser]);
 
   function signInDemo(role: "admin" | "user") {
@@ -118,6 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setDemoUser(null);
     setSession(null);
     setIsAdmin(false);
+    setRoles([]);
     await qc.cancelQueries();
     qc.removeQueries({ queryKey: ["me"] });
     qc.removeQueries({ queryKey: ["admin"] });
@@ -128,7 +137,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const activeUser = session?.user ?? demoUser ?? null;
 
   return (
-    <AuthContext.Provider value={{ ready, session, user: activeUser, isAdmin, signInDemo, signOut }}>
+    <AuthContext.Provider value={{ ready, session, user: activeUser, isAdmin, roles, signInDemo, signOut }}>
       {children}
     </AuthContext.Provider>
   );

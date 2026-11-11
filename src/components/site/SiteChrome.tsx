@@ -39,7 +39,7 @@ export function Logo() {
 }
 
 function AccountButton({ onNav }: { onNav?: () => void }) {
-  const { user, isAdmin, ready, signOut } = useAuth();
+  const { user, isAdmin, roles, ready, signOut } = useAuth();
   if (!ready) return <span className="hidden w-20 md:block" />;
   if (!user)
     return (
@@ -84,7 +84,7 @@ function AccountButton({ onNav }: { onNav?: () => void }) {
             </div>
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
+        {roles.includes("member") && <DropdownMenuItem asChild>
           <Link to="/dashboard/member" onClick={onNav} className="flex items-center gap-2 cursor-pointer">
             <GraduationCap className="size-4 text-primary" />
             <div>
@@ -92,8 +92,8 @@ function AccountButton({ onNav }: { onNav?: () => void }) {
               <p className="text-[10px] text-muted-foreground">Credentials & CPD vault</p>
             </div>
           </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
+        </DropdownMenuItem>}
+        {roles.includes("nominee") && <DropdownMenuItem asChild>
           <Link to="/dashboard/nominee" onClick={onNav} className="flex items-center gap-2 cursor-pointer">
             <Award className="size-4 text-primary" />
             <div>
@@ -101,8 +101,8 @@ function AccountButton({ onNav }: { onNav?: () => void }) {
               <p className="text-[10px] text-muted-foreground">Campaign hub & badge</p>
             </div>
           </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
+        </DropdownMenuItem>}
+        {roles.includes("jury") && <DropdownMenuItem asChild>
           <Link to="/dashboard/judge" onClick={onNav} className="flex items-center gap-2 cursor-pointer">
             <Scale className="size-4 text-primary" />
             <div>
@@ -110,7 +110,7 @@ function AccountButton({ onNav }: { onNav?: () => void }) {
               <p className="text-[10px] text-muted-foreground">Nominee scorecards</p>
             </div>
           </Link>
-        </DropdownMenuItem>
+        </DropdownMenuItem>}
         {isAdmin && (
           <>
             <DropdownMenuSeparator />

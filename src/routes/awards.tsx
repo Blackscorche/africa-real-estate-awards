@@ -13,6 +13,7 @@ import { bool, formatMoney, str } from "@/lib/settings";
 import { bookTickets, castVote, submitNomination } from "@/lib/submit.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveImageUrl } from "@/lib/utils";
 
 export const Route = createFileRoute("/awards")({
   head: () => ({
@@ -222,7 +223,7 @@ function AwardsPage() {
                   {showCounts && <div className="absolute inset-y-0 left-0 bg-primary/15 transition-all duration-700" style={{ width: `${pct}%` }} />}
                   <div className="relative flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      {n.image_url && <img src={n.image_url} alt="" className="size-12 rounded-full object-cover" />}
+                      {n.image_url && <img src={resolveImageUrl(n.image_url, "awards-trophy")} alt="" className="size-12 rounded-full object-cover" />}
                       <div>
                         <p className="flex flex-wrap items-center gap-2 font-display text-xl uppercase">
                           {n.name}
@@ -253,7 +254,7 @@ function AwardsPage() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {data.judges.map((j) => (
               <article key={j.id} className="glass-panel overflow-hidden">
-                {j.image_url && <img src={j.image_url} alt={j.name} width={816} height={816} loading="lazy" className="aspect-[4/3] w-full object-cover object-top" />}
+                {j.image_url && <img src={resolveImageUrl(j.image_url, "judge-folake")} alt={j.name} width={816} height={816} loading="lazy" className="aspect-[4/3] w-full object-cover object-top" />}
                 <div className="p-6">
                   <p className="eyebrow text-primary">{j.title}</p>
                   <p className="mt-1 font-display text-2xl uppercase">{j.name}</p>

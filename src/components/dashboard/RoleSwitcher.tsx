@@ -7,7 +7,7 @@ interface RoleSwitcherProps {
 }
 
 export function RoleSwitcher({ currentRole = "voter" }: RoleSwitcherProps) {
-  const { user, isAdmin, signOut } = useAuth();
+  const { user, isAdmin, roles: grantedRoles, signOut } = useAuth();
   const path = useRouterState({ select: (s) => s.location.pathname });
 
   const roles = [
@@ -97,7 +97,7 @@ export function RoleSwitcher({ currentRole = "voter" }: RoleSwitcherProps) {
 
         {/* Role Pills / Tabs */}
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {roles.map((r) => {
+          {roles.filter((r) => r.id === "voter" || grantedRoles.includes(r.id === "judge" ? "jury" : r.id)).map((r) => {
             const Icon = r.icon;
             const isCurrent = r.active;
             return (

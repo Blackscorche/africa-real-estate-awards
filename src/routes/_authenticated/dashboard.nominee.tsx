@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -22,6 +22,10 @@ import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 
 export const Route = createFileRoute("/_authenticated/dashboard/nominee")({
+  beforeLoad: async ({ context }) => {
+    const { data } = await supabase.rpc("has_role", { _user_id: context.userId, _role: "nominee" });
+    if (!data) throw redirect({ to: "/dashboard" });
+  },
   head: () => ({
     meta: [
       { title: "Nominee Campaign Portal — Africa Real Estate Awards" },

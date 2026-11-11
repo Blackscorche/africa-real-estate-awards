@@ -22,6 +22,13 @@
       "when": 1793909814234,
       "tag": "0002_scope_public_content_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794437000000,
+      "tag": "0004_repair_media_and_portal_roles",
+      "breakpoints": true
     }
   ]
 }

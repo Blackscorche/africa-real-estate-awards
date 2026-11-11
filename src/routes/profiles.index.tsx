@@ -5,6 +5,7 @@ import { PageHead } from "@/components/site/SiteChrome";
 import { SubmitButton, useFormSubmit } from "@/components/site/forms";
 import { globalQuery, profilesQuery } from "@/lib/queries";
 import { str } from "@/lib/settings";
+import { resolveImageUrl } from "@/lib/utils";
 import { sendEnquiry } from "@/lib/submit.functions";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -37,7 +38,7 @@ function ProfilesPage() {
       <section className="mx-auto grid max-w-7xl gap-6 px-6 pb-20 sm:grid-cols-2 lg:grid-cols-3">
         {profiles.map((p) => (
           <Link key={p.id} to="/profiles/$slug" params={{ slug: p.slug }} className="glass-panel rise group overflow-hidden">
-            {p.image_url && <img src={p.image_url} alt={p.name} width={816} height={816} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-700 group-hover:scale-105" />}
+              {p.image_url && <img src={resolveImageUrl(p.image_url, "profile-adaeze")} alt={p.name} width={816} height={816} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-700 group-hover:scale-105" />}
             <div className="p-6">
               <span className="eyebrow text-ice">{p.role} · {p.city}</span>
               <h2 className="mt-2 font-display text-3xl uppercase leading-none transition-colors group-hover:text-primary">{p.name}</h2>
