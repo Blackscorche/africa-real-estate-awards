@@ -26,9 +26,8 @@ create policy "Admins delete media" on storage.objects for delete to authenticat
 -- jury/nominee/voter roles with the admin SQL supplied after deployment.
 alter type public.app_role add value if not exists 'jury';
 alter type public.app_role add value if not exists 'nominee';
-alter type public.app_role add value if not exists 'voter';
 
--- Accounts begin as voters. Member, nominee and jury access must be assigned
+-- Accounts begin with the public voter dashboard. Member, nominee and jury access must be assigned
 -- intentionally by an administrator rather than being granted at sign-up.
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
@@ -36,7 +35,6 @@ begin
   insert into public.profiles (id, full_name, email)
   values (new.id, coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'), new.email)
   on conflict (id) do nothing;
-  insert into public.user_roles (user_id, role) values (new.id, 'voter') on conflict do nothing;
   if not exists (select 1 from public.user_roles where role = 'admin') then
     insert into public.user_roles (user_id, role) values (new.id, 'admin') on conflict do nothing;
   end if;
